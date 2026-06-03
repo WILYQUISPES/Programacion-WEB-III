@@ -4,7 +4,7 @@ const pool = require('./db');
 const app = express();
 app.use(express.json());
 
-// 1. Registrar una nueva categoria
+
 app.post('/categorias', async (req, res) => {
   const { nombre, descripcion } = req.body;
   const [result] = await pool.query(
@@ -15,13 +15,11 @@ app.post('/categorias', async (req, res) => {
   res.status(201).json(rows[0]);
 });
 
-// 2. Listar todas las categorias
 app.get('/categorias', async (req, res) => {
   const [rows] = await pool.query('SELECT * FROM categorias');
   res.json(rows);
 });
 
-// 3. Obtener una categoria con sus productos
 app.get('/categorias/:id', async (req, res) => {
   const { id } = req.params;
   const [categoria] = await pool.query('SELECT * FROM categorias WHERE id = ?', [id]);
@@ -32,7 +30,6 @@ app.get('/categorias/:id', async (req, res) => {
   res.json({ ...categoria[0], productos });
 });
 
-// 4. Actualizar los datos de una categoria
 app.patch('/categorias/:id', async (req, res) => {
   const { id } = req.params;
   const { nombre, descripcion } = req.body;
@@ -44,7 +41,6 @@ app.patch('/categorias/:id', async (req, res) => {
   res.json(rows[0]);
 });
 
-// 5. Eliminar una categoria y sus productos
 app.delete('/categorias/:id', async (req, res) => {
   const { id } = req.params;
   await pool.query('DELETE FROM productos WHERE categoriaId = ?', [id]);
